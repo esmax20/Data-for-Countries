@@ -48,9 +48,12 @@ const App = () => {
 
   const handleChange = (event) => {
     event.preventDefault()
-
     setCountry(event.target.value)
+  }
 
+  const selectCountry = name => {
+    console.log("País seleccionado:", name)
+    setCountry(name)
   }
 
   const someCountries = (country !== '')
@@ -63,7 +66,11 @@ const App = () => {
       ? ["Muchos resultados..."]
       : someCountries
 
-
+  const mostrarSomeCountries = (country === '')
+    ? false
+    : (Object.keys(someCountries).length > 10)
+      ? false
+      : true
 
   return (
     <div>
@@ -73,9 +80,20 @@ const App = () => {
       </form>
       <pre>
         {
-          !showCountry &&
+          !mostrarSomeCountries &&
+          <p>{filterCountries.map(msj => msj)}</p>
+        }
+        {
+          !showCountry && mostrarSomeCountries &&
           <dl>
-            {filterCountries.map(coun => <SearchingCountries key={coun} nameCountry={coun}/>)}
+            {filterCountries.map(coun =>
+              <SearchingCountries
+                key={coun}
+                nameCountry={coun}
+                selectCountry={() => selectCountry(coun)}
+              />
+            )
+            }
           </dl>
         }
         {
